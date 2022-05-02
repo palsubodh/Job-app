@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database</title>
+    <style>
+      
+    </style>
+    <link rel="stylesheet" href="commonStyles.css" />
+  </head>
+
+  <body>
+    
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="applied.html">Applied Jobs</a></div>
+      <div><a href="bookmark.html">Bookmarks</a></div>
+    </div>
+    <select id="sortsalary" onChange="handlebysalary()">
+      <option value="">Sort By salary</option>
+      <option value="HTL">HTL</option>
+      <option value="LTH">LTH</option>
+    </select>
+    <select id="sortNames" onChange="handleByName()">
+      <option value="">Sort By Name</option>
+      <option value="asc">Ascending</option>
+      <option value="des">Descending</option>
+    </select>
+
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Job applied</th>
+            <th>Salary expected (LPA)</th>
+            <th>Add to bookmark</th>
+          </tr>
+        </thead>
+        
+        <tbody id="body">
+          <!-- Append your output to tbody -->
+          
+        </tbody>
+      </table>
+    </main>
+
+  </body>
+  <script>
+    //you need to code here
+    var box=document.querySelector("#container")
+
+    var jobarr = JSON.parse(localStorage.getItem("joblist"))
+    
+    // console.log(jobarr)
+    displaydata(jobarr)
+
+    var bookmarkarr=JSON.parse(localStorage.getItem("bookmarks")) || [];
+
+    function displaydata(data){
+
+      document.querySelector("#body").innerHTML="";
+      
+      
+      data.forEach(function(elem){
+
+        var tr=document.createElement("tr");
+
+        var td1=document.createElement("td");
+        td1.innerText=elem.pname
+
+        var td2=document.createElement("td");
+        td2.innerText=elem.pemail
+
+        var td3=document.createElement("td");
+        td3.innerText=elem.prole
+
+        var td4=document.createElement("td");
+        td4.innerText=elem.psalary
+
+        var td5=document.createElement("td");
+        td5.innerText="Bookmark";
+        td5.style.color="Blue";
+        td5.style.cursor="pointer";
+
+        td5.addEventListener("click", function() {
+          bookmarkFunction(elem);
+        });
+
+        tr.append(td1,td2,td3,td4,td5)
+        // box.append(tr)
+        document.querySelector("tbody").append(tr)
+
+    });
+  }
+
+  function bookmarkFunction(elem){
+
+    bookmarkarr.push(elem);
+    // console.log(bookmarkarr);
+    localStorage.setItem("bookmarks",JSON.stringify(bookmarkarr))
+}
+
+    
+function handlebysalary(){
+  var select=document.querySelector("#sortsalary").value;
+  // console.log(select)
+  if(select=="HTL")
+  {
+    jobarr.sort(function(a,b){
+      console.log(jobarr)
+      return b.psalary-a.psalary
+    });
+    // displaydata(jobarr)
+  }
+  else if(select=="LTH")
+  {
+    jobarr.sort(function(a,b){
+      return a.psalary-b.psalary
+    });
+  
+  }
+  displaydata(jobarr)
+}
+  // Sort By Names
+  function handleByName(){
+      var selected = document.querySelector("#sortNames").value;
+      // console.log(selected);
+
+      // if(selected == "") window.location.reload();
+      var x=a.pname.toUpperCase()
+      var y= b.pname.toUpperCase()
+      
+      if(selected == "asc"){
+        jobarr.sort(function(a,b){
+          if(x>y) return 1;
+          if(x<y) return -1;
+          return 0;
+        });
+        // displayData(jobarr);
+      }
+      else if(selected == "des"){
+        jobarr.sort(function(a,b){
+          if(x<y) return -1;
+          if(x>y) return 1;
+          return 0;
+        });
+        displayData(jobarr);
+      }
+    }
+    
+
+
+
+
+
+
+  </script>
+</html>
